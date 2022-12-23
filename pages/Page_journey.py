@@ -41,7 +41,7 @@ if seed == 0:
 
 # Ajoutez un bouton pour lancer la génération d'image
 if st.sidebar.button("Générer l'image"):
-  images = generate_image(prompt, width, height, num_outputs, num_inference_steps, guidance_scale, scheduler, seed)
+  images = generate_image(prompt, width, height, num_outputs, num_inference_steps, guidance_scale, seed)
   # Ajoutez un bouton de téléchargement pour chaque image
   # Ajoutez un bouton de téléchargement pour chaque image
   # Créez une grille de deux colonnes
