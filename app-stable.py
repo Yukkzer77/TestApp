@@ -57,7 +57,7 @@ if st.sidebar.button("Générer l'image"):
   col1, col2 = st.columns(2)
   for i, image_url in enumerate(images):
     with col1 if i % 2 == 0 else col2:
-      st.image(image_url, width=width, caption=f"Image {i+1}")
+      st.image(image_url, caption=f"Image {i+1}")
     image_response = requests.get(image_url)
     btn = st.download_button(
               label=f"Télécharger l'image {i+1}",
