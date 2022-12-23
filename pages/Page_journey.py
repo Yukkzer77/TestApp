@@ -41,18 +41,14 @@ if seed == 0:
 
 # Ajoutez un bouton pour lancer la génération d'image
 if st.sidebar.button("Générer l'image"):
-  images = generate_image(prompt, width, height, num_outputs, num_inference_steps, guidance_scale, seed)
-  # Ajoutez un bouton de téléchargement pour chaque image
-  # Ajoutez un bouton de téléchargement pour chaque image
-  # Créez une grille de deux colonnes
-  col1, col2 = st.columns(2)
-  for i, image_url in enumerate(images):
-    with col1 if i % 2 == 0 else col2:
-      st.image(image_url, caption=f"Image {i+1}")
-    image_response = requests.get(image_url)
-    btn = st.download_button(
-              label=f"Télécharger l'image {i+1}",
-              data=image_response.content,  # Utilisez .content pour obtenir les données binaires de l'image
-              file_name=f"image_{i+1}.png",
-              mime="image/png"
-              )
+  image_url = generate_image(prompt, width, height, num_outputs, num_inference_steps, guidance_scale, seed)
+  st.image(image_url, width=width)
+  image_response = requests.get(image_url)
+  image_data = image_response.content
+  btn = st.download_button(
+            label="Download image",
+            data=image_data,
+            file_name="image.png",
+            mime="image/png"
+          )
+
