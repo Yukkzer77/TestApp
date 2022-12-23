@@ -13,6 +13,7 @@ version = model.versions.get("6359a0cab3ca6e4d3320c33d79096161208e9024d174b2311e
 
 # Définissez les paramètres du modèle par défaut
 prompt = "an astronaut riding a horse on mars artstation, hd, dramatic lighting, detailed"
+negative_prompt = ""
 width = 512
 height = 512
 prompt_strength = 0.8
@@ -23,7 +24,7 @@ scheduler = "DDIM"
 seed = None
 
 # Créez une fonction pour exécuter le modèle avec les paramètres spécifiés
-def generate_image(prompt, width, height, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed):
+def generate_image(prompt, negative_prompt, width, height, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed):
   output = version.predict(prompt=prompt, width=width, height=height, prompt_strength=prompt_strength,
                           num_outputs=num_outputs, num_inference_steps=num_inference_steps, guidance_scale=guidance_scale,
                           scheduler=scheduler, seed=seed)
@@ -32,9 +33,11 @@ def generate_image(prompt, width, height, prompt_strength, num_outputs, num_infe
 # Créez un formulaire pour que l'utilisateur puisse entrer les paramètres du modèle
 st.sidebar.header("Paramètres du modèle")
 prompt = st.sidebar.text_input("Prompt", value=prompt)
+negative_prompt = st.sidebar.text_input("Negative prompt", value=negative_prompt)
 width = st.sidebar.number_input("Largeur de l'image", value=width, min_value=128, max_value=1024)
 height = st.sidebar.number_input("Hauteur de l'image", value=height, min_value=128, max_value=1024)
 prompt_strength = st.sidebar.number_input("Force du prompt", value=prompt_strength, min_value=0.0, max_value=1.0)
+num_outputs = st.sidebar.number_input("Nombre d'images à générer", value=num_outputs, min_value=1, max_value=4)
 num_inference_steps = st.sidebar.number_input("Nombre d'étapes de débruitage", value=num_inference_steps, min_value=1, max_value=10000)
 guidance_scale = st.sidebar.number_input("Échelle de guidance", value=guidance_scale)
 scheduler = st.sidebar.selectbox("Planificateur", ["DDIM", "K_EULER", "DPMSolverMultistep"], index=0)
@@ -46,7 +49,7 @@ if seed == 0:
 
 # Ajoutez un bouton pour lancer la génération d'image
 if st.sidebar.button("Générer l'image"):
-  image_url = generate_image(prompt, width, height, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed)
+  image_url = generate_image(prompt, negative_prompt, width, height, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed)
   st.image(image_url, width=width)
   image_response = requests.get(image_url)
   image_data = image_response.content
