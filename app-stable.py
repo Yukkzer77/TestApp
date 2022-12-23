@@ -28,7 +28,7 @@ def generate_image(prompt, negative_prompt, width, height, prompt_strength, num_
   output = version.predict(prompt=prompt, negative_prompt=negative_prompt, width=width, height=height, prompt_strength=prompt_strength,
                           num_outputs=num_outputs, num_inference_steps=num_inference_steps, guidance_scale=guidance_scale,
                           scheduler=scheduler, seed=seed)
-  return output[0]
+  return output
 
 # Créez un formulaire pour que l'utilisateur puisse entrer les paramètres du modèle
 st.sidebar.header("Paramètres du modèle")
@@ -47,15 +47,16 @@ seed = st.sidebar.number_input("Graine aléatoire", format="%.0f")
 if seed == 0:
   seed = random.randint(1, 10000)
 
+
 # Ajoutez un bouton pour lancer la génération d'image
 if st.sidebar.button("Générer l'image"):
-  image_url = generate_image(prompt, negative_prompt, width, height, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed)
-  st.image(image_url, width=width)
-  image_response = requests.get(image_url)
-  image_data = image_response.content
-  btn = st.download_button(
-            label="Download image",
-            data=image_data,
-            file_name="image.png",
-            mime="image/png"
-          )
+  images = generate_image(prompt, negative_prompt, width, height, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed)
+  # Ajoutez un bouton de téléchargement pour chaque image
+  for i, image_url in enumerate(images):
+    image_response = requests.get(image_url)
+    btn = st.download_button(
+              label=f"Télécharger l'image {i+1}",
+              data=image_response,
+              file_name=f"image_{i+1}.png",
+              mime="image/png"
+            )
