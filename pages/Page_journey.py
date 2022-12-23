@@ -41,7 +41,7 @@ if seed == 0:
 # Ajoutez un bouton pour lancer la génération d'image
 if st.sidebar.button("Générer l'image"):
   image_url = generate_image(prompt, width, height, num_outputs, num_inference_steps, guidance_scale, seed)
-  st.image(image_url, width=width)
+  st.image(image_url)
   image_response = requests.get(image_url)
   image_data = image_response.content
   btn = st.download_button(
