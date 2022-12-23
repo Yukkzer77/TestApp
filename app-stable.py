@@ -25,7 +25,7 @@ seed = None
 
 # Créez une fonction pour exécuter le modèle avec les paramètres spécifiés
 def generate_image(prompt, negative_prompt, width, height, prompt_strength, num_outputs, num_inference_steps, guidance_scale, scheduler, seed):
-  output = version.predict(prompt=prompt, width=width, height=height, prompt_strength=prompt_strength,
+  output = version.predict(prompt=prompt, negative_prompt=negative_prompt, width=width, height=height, prompt_strength=prompt_strength,
                           num_outputs=num_outputs, num_inference_steps=num_inference_steps, guidance_scale=guidance_scale,
                           scheduler=scheduler, seed=seed)
   return output[0]
