@@ -54,6 +54,7 @@ if st.sidebar.button("Générer l'image"):
   # Ajoutez un bouton de téléchargement pour chaque image
     # Ajoutez un bouton de téléchargement pour chaque image
   for i, image_url in enumerate(images):
+    st.image(image_url, width=width)
     image_response = requests.get(image_url)
     btn = st.download_button(
               label=f"Télécharger l'image {i+1}",
