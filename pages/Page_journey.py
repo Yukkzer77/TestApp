@@ -30,6 +30,7 @@ st.sidebar.header("Paramètres du modèle")
 prompt = st.sidebar.text_input("Prompt", value=prompt)
 width = st.sidebar.number_input("Largeur de l'image", value=width, min_value=128, max_value=1024)
 height = st.sidebar.number_input("Hauteur de l'image", value=height, min_value=128, max_value=1024)
+num_outputs = st.sidebar.number_input("Nombre d'images à générer", value=num_outputs, min_value=1, max_value=4)
 num_inference_steps = st.sidebar.number_input("Nombre d'étapes de débruitage", value=num_inference_steps, min_value=1, max_value=10000)
 guidance_scale = st.sidebar.number_input("Échelle de guidance", value=guidance_scale)
 seed = st.sidebar.number_input("Graine aléatoire", format="%.0f")
@@ -40,13 +41,18 @@ if seed == 0:
 
 # Ajoutez un bouton pour lancer la génération d'image
 if st.sidebar.button("Générer l'image"):
-  image_url = generate_image(prompt, width, height, num_outputs, num_inference_steps, guidance_scale, seed)
-  st.image(image_url, width=width)
-  image_response = requests.get(image_url)
-  image_data = image_response.content
-  btn = st.download_button(
-            label="Download image",
-            data=image_data,
-            file_name="image.png",
-            mime="image/png"
-          )
+  images = generate_image(prompt, width, height, num_outputs, num_inference_steps, guidance_scale, scheduler, seed)
+  # Ajoutez un bouton de téléchargement pour chaque image
+  # Ajoutez un bouton de téléchargement pour chaque image
+  # Créez une grille de deux colonnes
+  col1, col2 = st.columns(2)
+  for i, image_url in enumerate(images):
+    with col1 if i % 2 == 0 else col2:
+      st.image(image_url, caption=f"Image {i+1}")
+    image_response = requests.get(image_url)
+    btn = st.download_button(
+              label=f"Télécharger l'image {i+1}",
+              data=image_response.content,  # Utilisez .content pour obtenir les données binaires de l'image
+              file_name=f"image_{i+1}.png",
+              mime="image/png"
+              )
